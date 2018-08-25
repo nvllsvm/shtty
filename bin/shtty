@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -e
+DOCKER_IMAGE=nvllsvm/shtty
+
+container_name="shytty-$(uuidgen)"
+trap "docker kill "$container_name"" SIGHUP
+
+if [[ $1 == '-u' ]]; then
+    docker pull $DOCKER_IMAGE
+    shift
+fi
+
+docker run \
+    --rm \
+    -it \
+    --name "${container_name}" \
+    -e PUID=$(id -u) \
+    -e PGID=$(id -g) \
+    -e PUSER=$USER \
+    -e PHOME=$HOME \
+    -v "$HOME:$HOME" \
+    -w "$PWD" \
+    $DOCKER_IMAGE "$@"
