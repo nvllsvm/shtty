@@ -1,9 +1,9 @@
 # shtty
 
 Spawn a Dockerized Alpine Linux shell with:
-* Your user
-* Your home directory
-* Your current work directory
+* A user configured with the same name, UID, primary GID
+* Your home directory as a volume
+* In your current working directory
 
 ## Usage
 
