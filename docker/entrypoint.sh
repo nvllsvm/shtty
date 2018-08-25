@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 set -e
-useradd -d $PHOME -u $PUID -g $PGID -s /bin/sh $PUSER &> /dev/null
+adduser -u $PUID -s /bin/sh -h $PHOME -H $PUSER -D
 export -n PGID
 export -n PHOME
 export -n PUID
