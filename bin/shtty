@@ -20,4 +20,5 @@ docker run \
     -e PHOME=$HOME \
     -v "$HOME:$HOME" \
     -w "$PWD" \
+    --net=host \
     $DOCKER_IMAGE "$@"
