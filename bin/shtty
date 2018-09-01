@@ -1,24 +1,43 @@
 #!/usr/bin/env bash
 set -e
-DOCKER_IMAGE=nvllsvm/shtty
+
+ROOT_PASSWORD=root
+USER_PASSWORD=user
+DOCKER_IMAGE=$1
+
+if [ -z $DOCKER_IMAGE ]; then
+    echo error: missing image argument
+    exit 1
+fi
+
+TEMP_DIR=$(mktemp -d /tmp/shtty.XXXXXXXXX)
+cat > $TEMP_DIR/entrypoint.sh<<_EOF
+#!/usr/bin/env sh
+if [ -x "\$(command -v useradd)" ]; then
+    useradd -M -d $HOME -u $(id -u) $USER
+else
+    adduser -u $(id -u) -h $HOME -H $USER -D
+fi
+
+if [ -x "\$(command -v busybox)" ]; then
+    chmod u+s /bin/busybox
+fi
+echo "root:$ROOT_PASSWORD" | chpasswd 2> /dev/null
+echo "$USER:$USER_PASSWORD" | chpasswd 2> /dev/null
+exec su $USER "\$@"
+_EOF
+trap "rm -rf $TEMP_DIR" EXIT
+chmod +x $TEMP_DIR/entrypoint.sh
 
 container_name="shytty-$(uuidgen)"
 trap "docker kill "$container_name"" SIGHUP
-
-if [[ $1 == '-u' ]]; then
-    docker pull $DOCKER_IMAGE
-    shift
-fi
-
 docker run \
     --rm \
     -it \
     --name "${container_name}" \
-    -e PUID=$(id -u) \
-    -e PGID=$(id -g) \
-    -e PUSER=$USER \
-    -e PHOME=$HOME \
     -v "$HOME:$HOME" \
+    -v "$TEMP_DIR:/tmp/shtty" \
     -w "$PWD" \
+    --entrypoint /tmp/shtty/entrypoint.sh \
     --net=host \
-    $DOCKER_IMAGE "$@"
+    $DOCKER_IMAGE
