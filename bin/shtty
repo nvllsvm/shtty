@@ -28,7 +28,7 @@ echo "$USER:$USER_PASSWORD" | chpasswd 2> /dev/null
 if [ $# -eq 0 ]; then
     exec su $USER
 else
-    exec su $USER -c "\$@"
+    exec su $USER -c "$@"
 fi
 _EOF
 trap "rm -rf $TEMP_DIR" EXIT
