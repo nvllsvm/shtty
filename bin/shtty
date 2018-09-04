@@ -3,12 +3,22 @@ set -e
 
 ROOT_PASSWORD=root
 USER_PASSWORD=user
+
+if [ "$1" = '-u' ]; then
+    DOCKER_PULL=1
+    shift
+fi
+
 DOCKER_IMAGE=$1
 shift
 
 if [ -z $DOCKER_IMAGE ]; then
     echo error: missing image argument
     exit 1
+fi
+
+if [ -n "$DOCKER_PULL" ]; then
+    docker pull "${DOCKER_IMAGE}" > /dev/null
 fi
 
 TEMP_DIR=$(mktemp -d /tmp/shtty.XXXXXXXXX)
