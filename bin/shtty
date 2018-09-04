@@ -29,7 +29,7 @@ _EOF
 trap "rm -rf $TEMP_DIR" EXIT
 chmod +x $TEMP_DIR/entrypoint.sh
 
-container_name="shytty-$(uuidgen)"
+container_name="shtty-$(uuidgen)"
 trap "docker kill "$container_name" >& /dev/null || true" SIGHUP EXIT
 docker run \
     --rm \
