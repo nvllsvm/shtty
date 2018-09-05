@@ -38,7 +38,18 @@ echo "$USER:$USER_PASSWORD" | chpasswd 2> /dev/null
 if [ $# -eq 0 ]; then
     exec su $USER
 else
-    exec su $USER -c "$@"
+    # magical...
+    C=''
+    for i in "\$@"; do
+        case "\$i" in
+            *\'*)
+                i=\$(printf "%s" "\$i" | sed "s/'/'\"'\"'/g")
+                ;;
+            *) : ;;
+        esac
+        C="\$C '\$i'"
+    done
+    exec su $USER -c "\$C"
 fi
 _EOF
 trap "rm -rf $TEMP_DIR" EXIT
