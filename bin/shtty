@@ -12,12 +12,13 @@ if [ "$1" = '--pull' ]; then
 fi
 
 DOCKER_IMAGE=$1
-shift
 
 if [ -z $DOCKER_IMAGE ]; then
-    echo error: missing image argument
+    >&2 echo error: missing image argument
     exit 1
 fi
+
+shift
 
 if [ -n "$DOCKER_PULL" ]; then
     docker pull "${DOCKER_IMAGE}" > /dev/null
