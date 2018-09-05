@@ -21,7 +21,9 @@ if [ -n "$DOCKER_PULL" ]; then
     docker pull "${DOCKER_IMAGE}" > /dev/null
 fi
 
+# ugh - Docker for Mac does not expose mktemp's default folder by default
 TEMP_DIR=$(mktemp -d /tmp/shtty.XXXXXXXXX)
+
 cat > $TEMP_DIR/entrypoint.sh<<_EOF
 #!/usr/bin/env sh
 if [ -x "\$(command -v useradd)" ]; then
