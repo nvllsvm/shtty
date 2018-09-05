@@ -58,7 +58,7 @@ fi
 _EOF
 chmod +x $TEMP_DIR/entrypoint.sh
 
-if [ -t 1 -a -t 2 ]; then
+if [ -t 0 -a -t 1 -a -t 2 ]; then
     tty_flag='-t'
 fi
 
