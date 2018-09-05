@@ -54,11 +54,10 @@ else
     exec su $USER -c "\$C"
 fi
 _EOF
-trap "rm -rf $TEMP_DIR" EXIT
 chmod +x $TEMP_DIR/entrypoint.sh
 
 container_name="shtty-$(uuidgen | tr -d -)"
-trap "docker kill "$container_name" >& /dev/null || true" SIGHUP EXIT
+trap "rm -rf "$TEMP_DIR"; docker kill "$container_name" >& /dev/null || true" SIGHUP EXIT
 docker run \
     --rm \
     -it \
