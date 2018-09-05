@@ -6,7 +6,7 @@ USER_PASSWORD=user
 USER="${USER:-$(whoami)}"
 USER_ID=$(id -u $USER)
 
-if [ "$1" = '-u' ]; then
+if [ "$1" = '--pull' ]; then
     DOCKER_PULL=1
     shift
 fi
