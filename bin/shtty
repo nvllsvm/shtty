@@ -4,6 +4,7 @@ set -e
 ROOT_PASSWORD=root
 USER_PASSWORD=user
 USER="${USER:-$(whoami)}"
+USER_ID=$(id -u $USER)
 
 if [ "$1" = '-u' ]; then
     DOCKER_PULL=1
@@ -28,9 +29,9 @@ TEMP_DIR=$(mktemp -d /tmp/shtty.XXXXXXXXX)
 cat > $TEMP_DIR/entrypoint.sh<<_EOF
 #!/usr/bin/env sh
 if [ -x "\$(command -v useradd)" ]; then
-    useradd -M -d $HOME -u $(id -u) $USER -s \$(getent passwd root | cut -d: -f7)
+    useradd -M -d $HOME -u $USER_ID $USER -s \$(getent passwd root | cut -d: -f7)
 else
-    adduser -u $(id -u) -h $HOME -H $USER -D -s \$(getent passwd root | cut -d: -f7)
+    adduser -u $USER_ID -h $HOME -H $USER -D -s \$(getent passwd root | cut -d: -f7)
 fi
 
 if [ -x "\$(command -v busybox)" ]; then
