@@ -69,4 +69,5 @@ docker run \
     -w "$PWD" \
     --entrypoint /tmp/shtty/entrypoint.sh \
     --net=host \
+    --user root \
     $DOCKER_IMAGE "$@"
