@@ -3,6 +3,7 @@ set -e
 
 ROOT_PASSWORD=root
 USER_PASSWORD=user
+USER="${USER:-$(whoami)}"
 
 if [ "$1" = '-u' ]; then
     DOCKER_PULL=1
