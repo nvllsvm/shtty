@@ -37,8 +37,8 @@ fi
 if [ -x "\$(command -v busybox)" ]; then
     chmod u+s /bin/busybox
 fi
-echo "root:$ROOT_PASSWORD" | chpasswd 2> /dev/null
-echo "$USER:$USER_PASSWORD" | chpasswd 2> /dev/null
+echo "root:$ROOT_PASSWORD" | chpasswd >& /dev/null
+echo "$USER:$USER_PASSWORD" | chpasswd >& /dev/null
 if [ $# -eq 0 ]; then
     exec su $USER
 else
