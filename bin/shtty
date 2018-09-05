@@ -58,11 +58,16 @@ fi
 _EOF
 chmod +x $TEMP_DIR/entrypoint.sh
 
+if [ -t 1 -a -t 2 ]; then
+    tty_flag='-t'
+fi
+
 container_name="shtty-$(uuidgen | tr -d -)"
 trap "rm -rf "$TEMP_DIR"; docker kill "$container_name" >& /dev/null || true" SIGHUP EXIT
 docker run \
     --rm \
-    -it \
+    -i \
+    $tty_flag \
     --name "${container_name}" \
     -v "$HOME:$HOME" \
     -v "$TEMP_DIR:/tmp/shtty" \
