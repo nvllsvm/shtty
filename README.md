@@ -31,6 +31,19 @@ $ echo hello! | shtty fedora tr a-z A-Z | shtty ubuntu sed 's/.*/!!&!!/'
 !!HELLO!!
 ```
 
+### Interactive Applications
+
+```
+$ docker run -d --net=host postgres
+6cf06bccc0df3a11cf1fd67d92752f74978dcf8e6e229b4a750031979f9124ca
+
+$ shtty postgres psql -U postgres -h localhost
+psql (10.5 (Debian 10.5-1.pgdg90+1))
+Type "help" for help.
+
+postgres=#
+```
+
 ## Usage
 
 ```
