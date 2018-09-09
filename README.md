@@ -3,6 +3,34 @@
 Run a shell or command Docker container as your user, with your home,
 and in your current working directory.
 
+## Examples
+
+### Shell
+
+```
+$ shtty alpine
+$ id
+uid=1000(ar) gid=1000(ar) groups=1000(ar) 
+$ pwd
+/home/ar
+$ ls -l
+total 116
+drwx------    6 ar       users        12288 Sep  9 22:33 .
+drwxr-xr-x    1 root     root          4096 Sep  9 22:31 ..
+-rw-------    1 ar       draje          139 Sep  9 22:33 .ash_history
+-rw-------    1 ar       draje          147 Sep  9 22:28 .bash_history
+drwxr-xr-x    8 ar       users         4096 Sep  7 23:35 .cache
+drwx------    5 ar       users         4096 Sep  7 16:23 .config
+...
+```
+
+### Pipes
+
+```
+$ echo hello! | shtty fedora tr a-z A-Z | shtty ubuntu sed 's/.*/!!&!!/'
+!!HELLO!!
+```
+
 ## Usage
 
 ```
