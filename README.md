@@ -10,5 +10,5 @@ Run a Docker container's shell with your user in your home.
 ## Usage
 
 ```
-$ ./bin/shtty [IMAGE]
+$ shtty [IMAGE]
 ```
