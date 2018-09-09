@@ -10,5 +10,12 @@ Run a Docker container's shell with your user in your home.
 ## Usage
 
 ```
-$ shtty [IMAGE]
+Usage:  shtty [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run a command in a new container as your user, with your home,
+and in your current working directory.
+
+Options:
+      --help                           Print usage
+      --pull                           Pull the image before running
 ```

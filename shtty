@@ -6,6 +6,45 @@ USER_PASSWORD=user
 USER="${USER:-$(whoami)}"
 USER_ID=$(id -u $USER)
 
+show_usage() {
+    cat <<EOF
+Usage:  shtty [OPTIONS] IMAGE [COMMAND] [ARG...]
+
+Run a command in a new container as your user, with your home,
+and in your current working directory.
+EOF
+}
+
+show_help() {
+    show_usage
+    echo
+    cat <<EOF
+Options:
+      --help                           Print usage
+      --pull                           Pull the image before running
+EOF
+    exit
+}
+
+missing_argument() {
+    cat >&2 <<EOF
+"shtty" requires at least 1 argument.
+See 'shtty --help'.
+EOF
+    echo >&2
+    show_usage >&2
+    exit 1
+}
+
+if [ $# = 0 ]; then
+    missing_argument
+fi
+
+if [ "$1" = '--help' ]; then
+    show_help
+    exit
+fi
+
 if [ "$1" = '--pull' ]; then
     DOCKER_PULL=1
     shift
@@ -14,8 +53,7 @@ fi
 DOCKER_IMAGE=$1
 
 if [ -z $DOCKER_IMAGE ]; then
-    >&2 echo error: missing image argument
-    exit 1
+    missing_argument
 fi
 
 shift
