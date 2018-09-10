@@ -27,7 +27,7 @@ drwx------    5 ar       users         4096 Sep  7 16:23 .config
 ### Pipes
 
 ```
-$ echo hello! | shtty fedora tr a-z A-Z | shtty ubuntu sed 's/.*/!!&!!/'
+$ echo hello | shtty fedora tr a-z A-Z | shtty ubuntu sed 's/.*/!!&!!/'
 !!HELLO!!
 ```
 
