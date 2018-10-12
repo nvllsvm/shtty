@@ -4,7 +4,7 @@ set -e
 ROOT_PASSWORD=root
 USER_PASSWORD=user
 USER="${USER:-$(whoami)}"
-USER_ID=$(id -u $USER)
+USER_ID="$(id -u $USER)"
 
 show_usage() {
     cat <<EOF
@@ -52,7 +52,7 @@ fi
 
 DOCKER_IMAGE=$1
 
-if [ -z $DOCKER_IMAGE ]; then
+if [ -z "$DOCKER_IMAGE" ]; then
     missing_argument
 fi
 
@@ -63,14 +63,14 @@ if [ -n "$DOCKER_PULL" ]; then
 fi
 
 # ugh - Docker for Mac does not expose mktemp's default folder by default
-TEMP_DIR=$(mktemp -d /tmp/shtty.XXXXXXXXX)
+TEMP_DIR="$(mktemp -d /tmp/shtty.XXXXXXXXX)"
 
-cat > $TEMP_DIR/entrypoint.sh<<_EOF
+cat > "$TEMP_DIR/entrypoint.sh"<<_EOF
 #!/usr/bin/env sh
 if [ -x "\$(command -v useradd)" ]; then
-    useradd -M -d $HOME -u $USER_ID $USER -s \$(getent passwd root | cut -d: -f7)
+    useradd -M -d "$HOME" -u "$USER_ID" "$USER" -s \$(getent passwd root | cut -d: -f7)
 else
-    adduser -u $USER_ID -h $HOME -H $USER -D -s \$(getent passwd root | cut -d: -f7)
+    adduser -u "$USER_ID" -h "$HOME" -H "$USER" -D -s \$(getent passwd root | cut -d: -f7)
 fi
 
 if [ -x "\$(command -v busybox)" ]; then
@@ -79,7 +79,7 @@ fi
 echo "root:$ROOT_PASSWORD" | chpasswd  2> /dev/null 1> /dev/null
 echo "$USER:$USER_PASSWORD" | chpasswd  2> /dev/null 1> /dev/null
 if [ $# -eq 0 ]; then
-    exec su $USER
+    exec su "$USER"
 else
     # magical...
     C=''
@@ -92,10 +92,10 @@ else
         esac
         C="\$C '\$i'"
     done
-    exec su $USER -c "\$C"
+    exec su "$USER" -c "\$C"
 fi
 _EOF
-chmod +x $TEMP_DIR/entrypoint.sh
+chmod +x "$TEMP_DIR/entrypoint.sh"
 
 container_name="shtty-$(cat /dev/urandom | LC_ALL=C tr -cd 'a-f0-9' | head -c 32)"
 trap "rm -rf "$TEMP_DIR"; docker kill "$container_name" > /dev/null 2>&1" HUP EXIT
@@ -113,4 +113,4 @@ docker run \
     --entrypoint /tmp/shtty/entrypoint.sh \
     --net=host \
     --user root \
-    $DOCKER_IMAGE "$@"
+    "$DOCKER_IMAGE" "$@"
