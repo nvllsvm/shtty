@@ -98,7 +98,7 @@ _EOF
 chmod +x "$TEMP_DIR/entrypoint.sh"
 
 container_name="shtty-$(cat /dev/urandom | LC_ALL=C tr -cd 'a-f0-9' | head -c 32)"
-trap "rm -rf "$TEMP_DIR"; docker kill "$container_name" > /dev/null 2>&1" HUP EXIT
+trap "rm -rf "$TEMP_DIR"; docker kill "$container_name" > /dev/null 2>&1; true" HUP EXIT
 if [ -t 0 -a -t 1 -a -t 2 ]; then
     tty_flag='-t'
 fi
