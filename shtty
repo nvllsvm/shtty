@@ -78,6 +78,9 @@ if [ -x "\$(command -v busybox)" ]; then
 fi
 echo "root:$ROOT_PASSWORD" | chpasswd  2> /dev/null 1> /dev/null
 echo "$USER:$USER_PASSWORD" | chpasswd  2> /dev/null 1> /dev/null
+if [ "$(uname)" = 'Darwin' ]; then
+    echo \$(getent hosts host.docker.internal | cut -d ' ' -f 1) localhost > /etc/hosts
+fi
 if [ $# -eq 0 ]; then
     exec su "$USER"
 else
