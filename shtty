@@ -20,8 +20,8 @@ show_help() {
     echo
     cat <<EOF
 Options:
-      --help                           Print usage
-      --pull                           Pull the image before running
+    --help      Print usage
+    --pull      Pull the image before running
 EOF
     exit
 }
@@ -36,25 +36,27 @@ EOF
     exit 1
 }
 
+
+while true; do
+    case "$1" in
+        --help)
+            show_help
+            exit
+            ;;
+        --pull)
+            DOCKER_PULL=1
+            shift
+            ;;
+        *)
+            break
+    esac
+done
+
 if [ $# = 0 ]; then
     missing_argument
 fi
 
-if [ "$1" = '--help' ]; then
-    show_help
-    exit
-fi
-
-if [ "$1" = '--pull' ]; then
-    DOCKER_PULL=1
-    shift
-fi
-
 DOCKER_IMAGE=$1
-
-if [ -z "$DOCKER_IMAGE" ]; then
-    missing_argument
-fi
 
 shift
 
